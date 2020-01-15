@@ -110,8 +110,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 {
                     for (Location location : locationResult.getLocations()) {
 
+                        System.out.println("@distance :: "+distance(mRecentLocation,location));
+
                         if(distance(mRecentLocation,location) > 2.5)
                         {
+
 
                             refreshData(location);
 
@@ -185,6 +188,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onResponse(Call call, Response response) throws IOException
             {
 
+//                Marker m = mMap.addMarker(new MarkerOptions()
+//                        .position(
+//                                new LatLng(73.8747327,18.606458))
+//                        .draggable(false).visible(true));
+
+                System.out.println("@onResponse :: "+response.body().string());
+
                 try {
 
                     for(Marker marker:potholes)
@@ -194,7 +204,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     potholes.clear();
 
-                    JSONArray jsonArray = new JSONArray(response.body());
+                    System.out.println("____________________________");
+
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+
+                    System.out.println("@Response :: "+jsonArray.length());
 
                     for(int i = 0; i < jsonArray.length();i++)
                     {
@@ -203,9 +217,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(
-                                        new LatLng(jsonObject.getDouble("latitude"),
-                                                jsonObject.getDouble("longitude")))
-                                .draggable(true).visible(false));
+                                        new LatLng(Double.valueOf(jsonObject.getString("latitude")),
+                                                Double.valueOf(jsonObject.getString("longitude"))))
+                                .draggable(false).visible(true));
 
                         potholes.add(marker);
 

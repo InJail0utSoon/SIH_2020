@@ -34,21 +34,21 @@ public class DatabaseManager
     private DatabaseManager()
     {
         okHttpClient = new OkHttpClient();
-        serverURL = "http://codecell.club/check/reson.php";
+        serverURL = "http://codecell.club/check/send.php";
 
     }
 
     /********************  Fxn to get Add Potholes  *****************/
 
-    public synchronized void addDataEntry(String userId,String img,Double longitude,Double latitude,Callback callback)
+    public synchronized void addDataEntry(String userId,String img,String longitude,String latitude,Callback callback)
     {
 
         RequestBody body =  new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("userId", userId)
-                .addFormDataPart("longitude",String.valueOf(longitude))
-                .addFormDataPart("latitude",String.valueOf(latitude))
-                .addFormDataPart("img",img)
+//                .addFormDataPart("userId", userId)
+                .addFormDataPart("longitude",longitude)
+                .addFormDataPart("latitude",latitude)
+                .addFormDataPart("image",img)
                 .addFormDataPart("upload","")
                 .build();
 

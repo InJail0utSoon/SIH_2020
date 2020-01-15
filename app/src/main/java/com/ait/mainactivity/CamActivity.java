@@ -205,6 +205,23 @@ public class CamActivity extends AppCompatActivity
         String userId = "fetch-from-firebase";
         onSuccessfulUpload(null);
         //call to rana fn()
+        DatabaseManager.getInstance().addDataEntry("dummy_user_id",encodedImageBase64,longitude,latitude,new Callback(){
+
+            @Override
+            public void onFailure(Call call, IOException ex)
+            {
+                ex.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+
+                    System.out.println("Response :: "+response.body().toString());
+
+            }
+
+        });
 
         System.out.println("====================================================");
         System.out.println(encodedImageBase64);

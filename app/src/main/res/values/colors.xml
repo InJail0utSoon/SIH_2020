@@ -6,6 +6,10 @@
 
     <color name="dark_blue">#3023AE</color>
     <color name="purple">#C86DD7</color>
+<!--    377CF0-->
+    <color name="top_fill_color">#377CF0</color>
+    <color name="middle_fill_color">#29BCC2</color>
+    <color name="bottom_fill_color">#E94543</color>
 
     <color name="login_form_details">#63FFFFFF</color>
     <color name="login_form_details_light">#AEFAF5F5</color>
