@@ -336,6 +336,7 @@ public class CamActivity extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
+
                         Toast.makeText(CamActivity.this,
                                 "Model Downloaded Successfully",
                                 Toast.LENGTH_SHORT)
@@ -493,13 +494,6 @@ public class CamActivity extends AppCompatActivity
 
 
 }
-
-
-
-
-
-
-
 
 
   /*private void doMultiPartRequest(String pathToFile)

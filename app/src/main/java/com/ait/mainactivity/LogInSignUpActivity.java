@@ -166,6 +166,8 @@ public class LogInSignUpActivity extends AppCompatActivity
             catch (ApiException e)
             {
                 // Google Sign In failed, update UI appropriately
+                System.out.println("@LoginSignUpActivity.onActivityResult :" + e.getMessage());
+                e.printStackTrace();
                 Toast.makeText(LogInSignUpActivity.this,"Google sign in failed",Toast.LENGTH_LONG).show();
             }
         }
