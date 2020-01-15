@@ -22,11 +22,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.location.Location;
 import android.view.View;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 /* ******************************************MapsActivity********************************************** */
@@ -36,6 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     // map reference
     private GoogleMap mMap;
 
+    private LinkedList<Marker> potholes;
     // cam position describer
     private CameraPosition camPos;
 
@@ -47,8 +61,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     // onCreate method
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
+        System.out.println("@MapsActivity.onCreate");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -58,9 +74,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /********************  Initialization function  *****************/
+
     // initializing location gathering utilities
     private void init()
     {
+        System.out.println("@MapsActivity.init");
+
         findViewById(R.id.AroundMe).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +110,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 {
                     for (Location location : locationResult.getLocations()) {
 
+                        if(distance(mRecentLocation,location) > 2.5)
+                        {
+
+                            refreshData(location);
+
+                        }
+
                         mRecentLocation = location;
 
                         System.out.println("@ "+location.getLongitude()+" "+location.getLatitude());
@@ -109,11 +136,101 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapFragment.getMapAsync(this);
 
+
+        potholes = new LinkedList<Marker>();
+
     }
+
+
+    private double distance(Location l1,Location l2)
+    {
+        Double lon1 = l1.getLongitude();
+        Double lon2 = l2.getLongitude();
+
+        Double lat1 = l1.getLatitude();
+        Double lat2 = l2.getLatitude();
+
+        if ((lat1 == lat2) && (lon1 == lon2))return 0;
+
+        else
+        {
+            double theta = lon1 - lon2;
+            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515;
+
+            dist = dist * 1.609344;
+
+            return (dist);
+        }
+    }
+
+    /********************  Map Marker Refresh  *****************/
+
+    private void refreshData(Location location)
+    {
+
+        System.out.println("@MapsActivity.refreshData");
+
+        DatabaseManager.getInstance().getNearbyData(location.getLongitude(),location.getLatitude(),new Callback(){
+
+            @Override
+            public void onFailure(Call call, IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException
+            {
+
+                try {
+
+                    for(Marker marker:potholes)
+                    {
+                        marker.remove();
+                    }
+
+                    potholes.clear();
+
+                    JSONArray jsonArray = new JSONArray(response.body());
+
+                    for(int i = 0; i < jsonArray.length();i++)
+                    {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        Marker marker = mMap.addMarker(new MarkerOptions()
+                                .position(
+                                        new LatLng(jsonObject.getDouble("latitude"),
+                                                jsonObject.getDouble("longitude")))
+                                .draggable(true).visible(false));
+
+                        potholes.add(marker);
+
+                    }
+
+                }
+
+                catch(Exception ex)
+                {
+
+                    ex.printStackTrace();
+                }
+            }
+
+        });
+
+    }
+
+    /********************  Localize Map View  *****************/
 
     // moving cam view to users location
     public void localize(View view)
     {
+
+        System.out.println("@MapsActivity.localize");
 
         camPos = new CameraPosition.Builder()
                 .target(new LatLng(mRecentLocation.getLatitude(),mRecentLocation.getLongitude()))
@@ -127,10 +244,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    /********************  Initial Map Construction  *****************/
 
     // initializing the map once its loaded
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        System.out.println("@MapsActivity.onMapReady");
 
         mMap = googleMap;
 
@@ -143,8 +263,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onResume() {
-        super.onResume();
 
+        System.out.println("@MapsActivity.onResume");
+
+        super.onResume();
         startLocationUpdates();
 
     }
