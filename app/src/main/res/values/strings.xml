@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MainActivity</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_cam">CamActivity</string>
+    <string name="title_activity_log_in_sign_up">LogInSignUpActivity</string>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login"><u>Login?</u></string>
+    <string name="signup"><u>Sign-up?</u></string>
+
+</resources>

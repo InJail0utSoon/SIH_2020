@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "728997193419",
+    "firebase_url": "https://gamini-8df09.firebaseio.com",
+    "project_id": "gamini-8df09",
+    "storage_bucket": "gamini-8df09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728997193419:android:b79019103a280fbdda9d4e",
+        "android_client_info": {
+          "package_name": "com.ait.mainactivity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728997193419-ap2b1tf7aekk1kkdsqbpkmsvfj031t1v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI6xFLX_BqUGUKiWb7U0nQOnPgMzEnIs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728997193419-ap2b1tf7aekk1kkdsqbpkmsvfj031t1v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
